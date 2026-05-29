@@ -39,25 +39,25 @@ resource "azurerm_virtual_network_peering" "spoke_hub" {
 resource "azurerm_subnet" "system_pool_subnet" {
   name                 = var.system_pool_subnet_name
   resource_group_name  = azurerm_resource_group.main.name
-  virtual_network_name = azurerm_virtual_network.hub.name
+  virtual_network_name = azurerm_virtual_network.spoke.name
   address_prefixes     = ["10.1.1.0/24"]
 }
 resource "azurerm_subnet" "app_pool_subnet" {
   name                 = var.app_pool_subnet_name
   resource_group_name  = azurerm_resource_group.main.name
-  virtual_network_name = azurerm_virtual_network.hub.name
+  virtual_network_name = azurerm_virtual_network.spoke.name
   address_prefixes     = ["10.1.2.0/24"]
 }
 resource "azurerm_subnet" "cron_job_pool_subnet" {
   name                 = var.cron_job_pool_subnet_name
   resource_group_name  = azurerm_resource_group.main.name
-  virtual_network_name = azurerm_virtual_network.hub.name
+  virtual_network_name = azurerm_virtual_network.spoke.name
   address_prefixes     = ["10.1.3.0/24"]
 }
 resource "azurerm_subnet" "kafka_subnet" {
   name                 = var.kafka_subnet_name
   resource_group_name  = azurerm_resource_group.main.name
-  virtual_network_name = azurerm_virtual_network.hub.name
+  virtual_network_name = azurerm_virtual_network.spoke.name
   address_prefixes     = ["10.1.4.0/24"]
 }
 resource "azurerm_subnet" "database" {
