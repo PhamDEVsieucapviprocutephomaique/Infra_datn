@@ -13,24 +13,31 @@ output "spoke_vnet_name" {
 output "spoke_vnet_address_space" {
     value = azurerm_virtual_network.spoke.address_space
 }
+
 output "hub_spoke" {
     value = azurerm_virtual_network_peering.hub_spoke.name
 }
 output "spoke_hub" {
     value = azurerm_virtual_network_peering.spoke_hub.name
 }
-output "system_pool_subnet_name" {
+output "firewall_subnet_id" {
+    value = azurerm_subnet.firewall_subnet.id
+}
+output "bastion_subnet_id" {
+    value = azurerm_subnet.bastion_subnet.id
+}
+output "system_pool_subnet_id" {
     value = azurerm_subnet.system_pool_subnet.id
 }
-output "app_pool_subnet_name" {
+output "app_pool_subnet_id" {
     value = azurerm_subnet.app_pool_subnet.id
 }
-output "cron_job_pool_subnet_name" {        
+output "cron_job_pool_subnet_id" {        
     value = azurerm_subnet.cron_job_pool_subnet.id
 }
-output "kafka_subnet_name" {
+output "kafka_subnet_id" {
     value = azurerm_subnet.kafka_subnet.id
 }
-output "database_subnet_name" {
+output "database_subnet_id" {
     value = azurerm_subnet.database.id
 }

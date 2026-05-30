@@ -27,7 +27,17 @@ variable "spoke_hub" {
     description = "Name of the peering from spoke to hub"
     type        = string
     default     = "spoke-hub"
-}                       
+}                      
+variable "firewall_subnet_name" {
+    description = "Name of the firewall subnet"
+    type        = string
+    default     = "firewall_subnet_name"
+}
+variable "bastion_subnet_name" {
+    description = "Name of the bastion subnet"
+    type        = string
+    default     = "bastion_subnet_name"
+}
 variable "system_pool_subnet_name" {
     description = "Name of the system pool subnet"
     type        = string
