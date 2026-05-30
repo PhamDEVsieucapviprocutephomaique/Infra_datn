@@ -10,6 +10,9 @@ output "hub_vnet_name" {
 output "spoke_vnet_name" {
     value = azurerm_virtual_network.spoke.name
 }
+output "spoke_vnet_id" {
+    value = azurerm_virtual_network.spoke.id
+}
 output "spoke_vnet_address_space" {
     value = azurerm_virtual_network.spoke.address_space
 }
@@ -22,6 +25,9 @@ output "spoke_hub" {
 }
 output "firewall_subnet_id" {
     value = azurerm_subnet.firewall_subnet.id
+}
+output "appgw_subnet_id" {
+    value = azurerm_subnet.appgw.id
 }
 output "bastion_subnet_id" {
     value = azurerm_subnet.bastion_subnet.id

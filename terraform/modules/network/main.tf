@@ -51,6 +51,13 @@ resource "azurerm_subnet" "bastion_subnet" {
   virtual_network_name = azurerm_virtual_network.hub.name
   address_prefixes     = ["10.0.2.0/24"]
 }
+resource "azurerm_subnet" "appgw" {
+  name                 = var.appgw_subnet_name
+  resource_group_name  = azurerm_resource_group.main.name
+  virtual_network_name = azurerm_virtual_network.hub.name
+  address_prefixes     = ["10.0.3.0/24"]
+}
+
 
 
 

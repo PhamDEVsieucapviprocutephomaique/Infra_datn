@@ -38,6 +38,11 @@ variable "bastion_subnet_name" {
     type        = string
     default     = "bastion_subnet_name"
 }
+variable "appgw_subnet_name" {
+    description = "Name of the Application Gateway subnet"
+    type        = string
+    default     = "appgw-subnet"
+}
 variable "system_pool_subnet_name" {
     description = "Name of the system pool subnet"
     type        = string
