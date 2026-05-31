@@ -35,7 +35,7 @@ resource "azurerm_kubernetes_cluster" "main" {
         name                         = "system"
         node_count                   = 3
         vm_size                      = "Standard_D4s_v5"
-        vnet_subnet_id               = data.terraform_remote_state.network.outputs.system_pool_subnet_name
+        vnet_subnet_id               = data.terraform_remote_state.network.outputs.system_pool_subnet_id
         auto_scaling_enabled         = true
         min_count                    = 3
         max_count                    = 5
@@ -104,7 +104,7 @@ resource "azurerm_kubernetes_cluster_node_pool" "app" {
   name                  = var.aks_app_pool_name
   kubernetes_cluster_id = azurerm_kubernetes_cluster.main.id
   vm_size               = "Standard_D8s_v5"
-  vnet_subnet_id        = data.terraform_remote_state.network.outputs.app_pool_subnet_name
+  vnet_subnet_id        = data.terraform_remote_state.network.outputs.app_pool_subnet_id
   auto_scaling_enabled  = true
   min_count             = 5
   max_count             = 10
@@ -123,7 +123,7 @@ resource "azurerm_kubernetes_cluster_node_pool" "cron_job" {
   name                  = var.aks_cron_job_pool_name
   kubernetes_cluster_id = azurerm_kubernetes_cluster.main.id
   vm_size               = "Standard_D4s_v5"
-  vnet_subnet_id        = data.terraform_remote_state.network.outputs.cron_job_pool_subnet_name
+  vnet_subnet_id        = data.terraform_remote_state.network.outputs.cron_job_pool_subnet_id
   auto_scaling_enabled  = true
   min_count             = 1
   max_count             = 3
@@ -161,8 +161,11 @@ resource "azurerm_log_analytics_solution" "container_insights" {
 }
 
 # Role Assignment - AKS identity đọc được ACR 
+data "azurerm_subscription" "current" {}
+
 resource "azurerm_role_assignment" "aks_network" {
   principal_id         = azurerm_user_assigned_identity.aks.principal_id
   role_definition_name = "Network Contributor"
-  scope                = "/subscriptions/${var.subscription_id}/resourceGroups/${data.terraform_remote_state.network.outputs.resource_group_name}"
+  # Dùng data source thay vì biến
+  scope                = data.azurerm_subscription.current.id
 }

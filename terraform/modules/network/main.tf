@@ -69,18 +69,21 @@ resource "azurerm_subnet" "system_pool_subnet" {
   resource_group_name  = azurerm_resource_group.main.name
   virtual_network_name = azurerm_virtual_network.spoke.name
   address_prefixes     = ["10.1.1.0/24"]
+  service_endpoints    = ["Microsoft.KeyVault", "Microsoft.ContainerRegistry"]
 }
 resource "azurerm_subnet" "app_pool_subnet" {
   name                 = var.app_pool_subnet_name
   resource_group_name  = azurerm_resource_group.main.name
   virtual_network_name = azurerm_virtual_network.spoke.name
   address_prefixes     = ["10.1.2.0/24"]
+  service_endpoints    = ["Microsoft.KeyVault", "Microsoft.ContainerRegistry"]
 }
 resource "azurerm_subnet" "cron_job_pool_subnet" {
   name                 = var.cron_job_pool_subnet_name
   resource_group_name  = azurerm_resource_group.main.name
   virtual_network_name = azurerm_virtual_network.spoke.name
   address_prefixes     = ["10.1.3.0/24"]
+  service_endpoints    = ["Microsoft.KeyVault", "Microsoft.ContainerRegistry"]
 }
 resource "azurerm_subnet" "kafka_subnet" {
   name                 = var.kafka_subnet_name

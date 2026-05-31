@@ -6,7 +6,7 @@ variable "appgw_name" {
 variable "ssl_cert_key_vault_secret_id" {
     description = "ID of the Key Vault secret containing the SSL certificate for App Gateway"
     type        = string
-    default     = "ssl_cert_key_vault_secret_id"
+    default = data.terraform_remote_state.services.outputs.ssl_cert_secret_id
 }
 variable "appgw_pip_name"{
     description = "Name of the Public IP for the Application Gateway"
@@ -41,5 +41,10 @@ variable "appgw_identity_name"{
 variable "keyvault_id"{
     description = "ID of the Key Vault containing the SSL certificate for App Gateway"
     type        = string
-    default     = "keyvault_id"
+    default = data.terraform_remote_state.services.outputs.keyvault_id
+}
+variable "aks_ingress_fqdn" {
+  description = "FQDN của AKS Ingress Controller"
+  type        = string
+  default     = "aks-ingress.internal.cloudapp.net"
 }

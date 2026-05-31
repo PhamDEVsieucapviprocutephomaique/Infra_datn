@@ -25,7 +25,7 @@ resource "azurerm_network_security_group" "system_pool" {
   }
 }
 resource "azurerm_subnet_network_security_group_association" "system_pool" {
-  subnet_id                 = data.terraform_remote_state.network.outputs.system_pool_subnet_name
+  subnet_id                 = data.terraform_remote_state.network.outputs.system_pool_subnet_id
   network_security_group_id = azurerm_network_security_group.system_pool.id
 }
 
@@ -47,7 +47,7 @@ resource "azurerm_network_security_group" "app_pool" {
   }
 }
 resource "azurerm_subnet_network_security_group_association" "app_pool" {
-  subnet_id                 = data.terraform_remote_state.network.outputs.app_pool_subnet_name
+  subnet_id                 = data.terraform_remote_state.network.outputs.app_pool_subnet_id
   network_security_group_id = azurerm_network_security_group.app_pool.id
 }
 
@@ -70,7 +70,7 @@ resource "azurerm_network_security_group" "cron_job_pool" {
   }
 }
 resource "azurerm_subnet_network_security_group_association" "cron_job_pool" {
-  subnet_id                 = data.terraform_remote_state.network.outputs.cron_job_pool_subnet_name
+  subnet_id                 = data.terraform_remote_state.network.outputs.cron_job_pool_subnet_id
   network_security_group_id = azurerm_network_security_group.cron_job_pool.id
 }
 
@@ -94,7 +94,7 @@ resource "azurerm_network_security_group" "kafka" {
 
 }
 resource "azurerm_subnet_network_security_group_association" "kafka" {
-  subnet_id                 = data.terraform_remote_state.network.outputs.kafka_subnet_name
+  subnet_id                 = data.terraform_remote_state.network.outputs.kafka_subnet_id
   network_security_group_id = azurerm_network_security_group.kafka.id
 }
 
@@ -119,6 +119,6 @@ resource "azurerm_network_security_group" "database" {
 }
 
 resource "azurerm_subnet_network_security_group_association" "database" {
-  subnet_id                 = data.terraform_remote_state.network.outputs.database_subnet_name
+  subnet_id                 = data.terraform_remote_state.network.outputs.database_subnet_id
   network_security_group_id = azurerm_network_security_group.database.id
 }

@@ -6,7 +6,7 @@ resource "azurerm_postgresql_flexible_server" "main" {
   location                      = data.terraform_remote_state.network.outputs.location
   resource_group_name           = data.terraform_remote_state.network.outputs.resource_group_name
   version                       = "17"
-  delegated_subnet_id           = data.terraform_remote_state.network.outputs.database_subnet_name
+  delegated_subnet_id           = data.terraform_remote_state.network.outputs.database_subnet_id
   private_dns_zone_id           = azurerm_private_dns_zone.postgresql.id
   administrator_login           = var.postgresql_admin_login
   administrator_password        = var.postgresql_admin_password

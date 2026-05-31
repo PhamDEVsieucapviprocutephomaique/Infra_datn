@@ -1,3 +1,5 @@
+// fake 
+
 variable "acr_name"{
     description = "Name of the Azure Container Registry"
     type        = string
@@ -12,7 +14,7 @@ variable "kafka_vm_admin_username"{
 variable "kafka_vm_ssh_public_key"{
     description = "SSH public key for the Kafka VM admin user"
     type        = string
-    default = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQC7..." 
+    # default = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQC7..."  fake
 }
 
 variable "keyvault_name" {

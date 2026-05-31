@@ -40,22 +40,6 @@ resource "azurerm_firewall_policy_rule_collection_group" "main" {
   priority           = 100
 
 
-  nat_rule_collection {
-    name="dnat-inbound-to-aks"
-    priority = 100
-    action   = "Dnat"
-    rule{
-      name                = "allow-https-inbound"
-      protocols           = ["TCP"]
-      source_addresses    = ["*"] # Hoặc giới hạn IP của Cloudflare/WAF nếu có
-      destination_address = azurerm_public_ip.firewall_public_ip.ip_address
-      destination_ports   = ["443"]
-      # IP Private của Internal Load Balancer (Ingress Controller) trong AKS
-      translated_address  = var.aks_ingress_internal_ip 
-      translated_port     = "443"
-    }
-
-  }
    network_rule_collection {
     name     = "aks-outbound-network"
     priority = 200

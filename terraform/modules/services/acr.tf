@@ -8,6 +8,18 @@ resource "azurerm_container_registry" "main" {
   network_rule_set {
     default_action = "Deny"
     ip_rule        = []
+    virtual_network_rule {
+      action    = "Allow"
+      subnet_id = data.terraform_remote_state.network.outputs.system_pool_subnet_id
+    }
+    virtual_network_rule {
+      action    = "Allow"
+      subnet_id = data.terraform_remote_state.network.outputs.app_pool_subnet_id
+    }
+    virtual_network_rule {
+      action    = "Allow"
+      subnet_id = data.terraform_remote_state.network.outputs.cron_job_pool_subnet_id
+    }
   }
 
   georeplications {

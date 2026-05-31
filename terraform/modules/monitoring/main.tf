@@ -1,6 +1,4 @@
-# ─────────────────────────────────────────
-# Remote state từ 1-network
-# ─────────────────────────────────────────
+
 data "terraform_remote_state" "network" {
   backend = "azurerm"
   config = {
@@ -11,9 +9,7 @@ data "terraform_remote_state" "network" {
   }
 }
 
-# ─────────────────────────────────────────
-# Remote state từ 4-aks
-# ─────────────────────────────────────────
+
 data "terraform_remote_state" "aks" {
   backend = "azurerm"
   config = {
@@ -24,9 +20,7 @@ data "terraform_remote_state" "aks" {
   }
 }
 
-# ─────────────────────────────────────────
-# Action Group - alert gửi email/slack
-# ─────────────────────────────────────────
+
 resource "azurerm_monitor_action_group" "main" {
   name                = var.action_group_name
   resource_group_name = data.terraform_remote_state.network.outputs.resource_group_name
@@ -38,12 +32,8 @@ resource "azurerm_monitor_action_group" "main" {
     use_common_alert_schema = true
   }
 
-  tags = var.tags
 }
 
-# ─────────────────────────────────────────
-# Alert - Node CPU cao
-# ─────────────────────────────────────────
 resource "azurerm_monitor_metric_alert" "node_cpu" {
   name                = "alert-node-cpu-high"
   resource_group_name = data.terraform_remote_state.network.outputs.resource_group_name
@@ -68,9 +58,6 @@ resource "azurerm_monitor_metric_alert" "node_cpu" {
   tags = var.tags
 }
 
-# ─────────────────────────────────────────
-# Alert - Node Memory cao
-# ─────────────────────────────────────────
 resource "azurerm_monitor_metric_alert" "node_memory" {
   name                = "alert-node-memory-high"
   resource_group_name = data.terraform_remote_state.network.outputs.resource_group_name
@@ -94,10 +81,6 @@ resource "azurerm_monitor_metric_alert" "node_memory" {
 
   tags = var.tags
 }
-
-# ─────────────────────────────────────────
-# Alert - Pod restart nhiều
-# ─────────────────────────────────────────
 resource "azurerm_monitor_metric_alert" "pod_restart" {
   name                = "alert-pod-restart"
   resource_group_name = data.terraform_remote_state.network.outputs.resource_group_name
@@ -122,9 +105,6 @@ resource "azurerm_monitor_metric_alert" "pod_restart" {
   tags = var.tags
 }
 
-# ─────────────────────────────────────────
-# Diagnostic Settings - AKS logs
-# ─────────────────────────────────────────
 resource "azurerm_monitor_diagnostic_setting" "aks" {
   name                       = "diag-aks"
   target_resource_id         = data.terraform_remote_state.aks.outputs.aks_id
@@ -156,9 +136,7 @@ resource "azurerm_monitor_diagnostic_setting" "aks" {
   }
 }
 
-# ─────────────────────────────────────────
-# Dashboard
-# ─────────────────────────────────────────
+
 resource "azurerm_portal_dashboard" "main" {
   name                = var.dashboard_name
   resource_group_name = data.terraform_remote_state.network.outputs.resource_group_name

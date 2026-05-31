@@ -17,9 +17,9 @@ resource "azurerm_key_vault" "main" {
     default_action = "Deny"
     bypass         = "AzureServices"
     virtual_network_subnet_ids = [
-      data.terraform_remote_state.network.outputs.system_pool_subnet_name,
-      data.terraform_remote_state.network.outputs.app_pool_subnet_name,
-      data.terraform_remote_state.network.outputs.cron_job_pool_subnet_name,
+      data.terraform_remote_state.network.outputs.system_pool_subnet_id,
+      data.terraform_remote_state.network.outputs.app_pool_subnet_id,
+      data.terraform_remote_state.network.outputs.cron_job_pool_subnet_id,
     ]
   }
 

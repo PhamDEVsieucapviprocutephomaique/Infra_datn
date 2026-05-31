@@ -1,9 +1,11 @@
 variable "action_group_name" {
   default = "ag-devops"
+
 }
 
 variable "alert_email" {
   description = "Email nhận alert"
+  default = "devopsalert@gmail.com"
 }
 
 variable "dashboard_name" {

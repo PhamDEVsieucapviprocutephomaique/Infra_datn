@@ -24,12 +24,7 @@ variable "route_name" {
     type        = string
     default     = "route-to-firewall"
 }
-/// aks ingress _ pivate ip
-variable "aks_ingress_internal_ip" {
-    description = "Internal IP of the AKS Ingress Controller (ILB)"
-    type        = string
-    default     = " "
-}
+
 
 //
 variable "firewall_name" {

@@ -34,11 +34,5 @@ variable "aks_dns_prefix"{
 variable "kubernetes_version" {
     description = "Kubernetes version for the AKS Cluster"
     type        = string
-    default     = "1.35"
+    default     = "1.32"
 }
-variable "subscription_id" {
-    description = "Azure Subscription ID"
-    type        = string
-    default     = " "
-}
-

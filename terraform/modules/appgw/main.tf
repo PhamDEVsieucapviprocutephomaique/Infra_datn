@@ -8,6 +8,15 @@ data "terraform_remote_state" "network" {
   }
 }
 
+data "terraform_remote_state" "aks" {
+  backend = "azurerm"
+  config = {
+    resource_group_name  = "terraform-state"
+    storage_account_name = "storage_account"
+    container_name       = "storage_container"
+    key                  = "aks.tfstate"
+  }
+}
 resource "azurerm_public_ip" "appgw" {
   name                = var.appgw_pip_name
   location            = data.terraform_remote_state.network.outputs.location
@@ -77,7 +86,7 @@ resource "azurerm_application_gateway" "main" {
 
   gateway_ip_configuration {
     name      = "appgw-ip-config"
-    subnet_id = azurerm_subnet.appgw.id
+    subnet_id =  data.terraform_remote_state.network.outputs.appgw_subnet_id
   }
 
   # ── Frontend ──
@@ -99,6 +108,7 @@ resource "azurerm_application_gateway" "main" {
   # ── Backend ──
   backend_address_pool {
     name = local.backend_address_pool_name
+    fqdns = [var.aks_ingress_fqdn]
   }
 
   backend_http_settings {
@@ -191,9 +201,6 @@ resource "azurerm_application_gateway" "main" {
 
 }
 
-# ─────────────────────────────────────────
-# User Assigned Identity cho App Gateway
-# ─────────────────────────────────────────
 resource "azurerm_user_assigned_identity" "appgw" {
   name                = var.appgw_identity_name
   location            = data.terraform_remote_state.network.outputs.location

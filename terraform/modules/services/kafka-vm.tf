@@ -6,7 +6,7 @@ resource "azurerm_network_interface" "kafka" {
 
   ip_configuration {
     name                          = "ipconfig-kafka-${count.index}"
-    subnet_id                     = data.terraform_remote_state.network.outputs.kafka_subnet_name
+    subnet_id                     = data.terraform_remote_state.network.outputs.kafka_subnet_id
     private_ip_address_allocation = "Static"
     private_ip_address            = "10.1.4.${count.index + 4}"
   }

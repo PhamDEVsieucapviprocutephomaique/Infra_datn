@@ -4,15 +4,19 @@ output "aks_name" {
 }
 output "aks_identity_id" {
     description = "ID of the AKS Managed Identity"
-    value       = azurerm_user_assigned_identity.aks_identity.id
+    value       = azurerm_user_assigned_identity.aks.id
+}
+output "aks_id"{
+    description = "ID of the AKS Cluster"
+    value       = azurerm_kubernetes_cluster.main.id
 }
 output "aks_identity_client_id" {
     description = "Client ID of the AKS Managed Identity"
-    value       = azurerm_user_assigned_identity.aks_identity.client_id
+    value       = azurerm_user_assigned_identity.aks.client_id
 }
 output "aks_identity_principal_id" {
     description = "Principal ID of the AKS Managed Identity"
-    value       = azurerm_user_assigned_identity.aks_identity.principal_id
+    value       = azurerm_user_assigned_identity.aks.principal_id
 }
 output "aks_app_pool_name" {
     description = "Name of the AKS App Node Pool"
