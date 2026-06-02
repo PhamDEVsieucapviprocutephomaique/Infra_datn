@@ -10,9 +10,9 @@ variable "resource_group_name" {
 
 variable "storage_account_name"{
     type       = string
-    default    = "storage_account"
+    default    = "9082400test"
 }
 variable "storage_container" {
     type       = string
-    default    = "storage_container"
+    default    = "082400container"
 }

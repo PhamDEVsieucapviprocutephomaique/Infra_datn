@@ -1,0 +1,26 @@
+.terraform/
+.terraform.lock.hcl
+
+*.tfstate
+*.tfstate.*
+
+
+# File backup trạng thái
+*.backup
+
+
+# Biến môi trường ẩn
+*.tfvars
+*.tfvars.json
+override.tf
+override.tf.json
+*_override.tf
+*_override.tf.json
+
+# Crash log của Terraform
+crash.log
+crash.*.log
+
+# Các file kế hoạch (Plan files)
+*.tfplan
+*.tfplan.*

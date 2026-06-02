@@ -2,8 +2,8 @@ data "terraform_remote_state" "network" {
   backend = "azurerm"
   config = {
     resource_group_name  = "terraform-state"
-    storage_account_name = "storage_account"
-    container_name       = "storage_container"
+    storage_account_name = "9082400test"
+    container_name       = "082400container"
     key                  = "network.tfstate"
   }
 }
@@ -12,8 +12,8 @@ data "terraform_remote_state" "firewall" {
   backend = "azurerm"
   config = {
     resource_group_name  = "terraform-state"
-    storage_account_name = "storage_account"
-    container_name       = "storage_container"
+    storage_account_name = "9082400test"
+    container_name       = "082400container"
     key                  = "firewall.tfstate"
   }
 }
@@ -31,14 +31,15 @@ resource "azurerm_kubernetes_cluster" "main" {
   resource_group_name = data.terraform_remote_state.network.outputs.resource_group_name
   dns_prefix          = var.aks_dns_prefix 
   kubernetes_version  = var.kubernetes_version
+  sku_tier           = "Premium"
     default_node_pool {
         name                         = "system"
-        node_count                   = 3
-        vm_size                      = "Standard_D4s_v5"
+        node_count                   = 1
+        vm_size                      = "Standard_D2_v4"
         vnet_subnet_id               = data.terraform_remote_state.network.outputs.system_pool_subnet_id
         auto_scaling_enabled         = true
-        min_count                    = 3
-        max_count                    = 5
+        min_count                    = 1
+        max_count                    = 1
         os_disk_size_gb              = 128
         os_disk_type                 = "Managed"
         only_critical_addons_enabled = true
@@ -54,7 +55,7 @@ resource "azurerm_kubernetes_cluster" "main" {
     network_profile {
     network_plugin      = "azure"
     network_plugin_mode = "overlay"
-    network_policy      = "cilium"
+    network_policy      = "azure"  
     load_balancer_sku   = "standard"
     outbound_type       = "userDefinedRouting"
     dns_service_ip      = "172.16.0.10"
@@ -98,16 +99,16 @@ resource "azurerm_kubernetes_cluster" "main" {
 }
 
 
-// app_pool
+//  ko đủ qouta , hàng free học tập nên chịu =))
 
 resource "azurerm_kubernetes_cluster_node_pool" "app" {
   name                  = var.aks_app_pool_name
   kubernetes_cluster_id = azurerm_kubernetes_cluster.main.id
-  vm_size               = "Standard_D8s_v5"
+  vm_size               = "Standard_D2_v4"
   vnet_subnet_id        = data.terraform_remote_state.network.outputs.app_pool_subnet_id
   auto_scaling_enabled  = true
-  min_count             = 5
-  max_count             = 10
+  min_count             = 1
+  max_count             = 1
   os_disk_size_gb       = 128
   os_disk_type          = "Managed"
   os_type               = "Linux"
@@ -122,11 +123,11 @@ resource "azurerm_kubernetes_cluster_node_pool" "app" {
 resource "azurerm_kubernetes_cluster_node_pool" "cron_job" {
   name                  = var.aks_cron_job_pool_name
   kubernetes_cluster_id = azurerm_kubernetes_cluster.main.id
-  vm_size               = "Standard_D4s_v5"
+  vm_size               = "Standard_D2_v4"
   vnet_subnet_id        = data.terraform_remote_state.network.outputs.cron_job_pool_subnet_id
   auto_scaling_enabled  = true
   min_count             = 1
-  max_count             = 3
+  max_count             = 1
   os_disk_size_gb       = 128
   os_disk_type          = "Managed"
   os_type               = "Linux"

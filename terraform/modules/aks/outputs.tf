@@ -18,14 +18,14 @@ output "aks_identity_principal_id" {
     description = "Principal ID of the AKS Managed Identity"
     value       = azurerm_user_assigned_identity.aks.principal_id
 }
-output "aks_app_pool_name" {
-    description = "Name of the AKS App Node Pool"
-    value       = azurerm_kubernetes_cluster_node_pool.app.name
-}
-output "aks_cron_job_pool_name" {
-    description = "Name of the AKS Cron Job Node Pool"
-    value       = azurerm_kubernetes_cluster_node_pool.cron_job.name
-}
+# output "aks_app_pool_name" {
+#     description = "Name of the AKS App Node Pool"
+#     value       = azurerm_kubernetes_cluster_node_pool.app.name
+# }
+# output "aks_cron_job_pool_name" {
+#     description = "Name of the AKS Cron Job Node Pool"
+#     value       = azurerm_kubernetes_cluster_node_pool.cron_job.name
+# }
 output "log_analytics_workspace_id" {
     description = "ID of the Log Analytics Workspace"   
     value       = azurerm_log_analytics_workspace.main.id

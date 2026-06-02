@@ -1,4 +1,4 @@
-resource "azurerm resource_group" "state" {
+resource "azurerm_resource_group" "state" {
   name     = var.resource_group_name
   location = var.location
 }
@@ -12,8 +12,8 @@ resource "azurerm_storage_account" "state" {
 }
 
 
-resource "azurerm_storage_container" "example" {
+resource "azurerm_storage_container" "state" {
   name                  = var.storage_container
-  storage_account_id    = azurerm_storage_account.state.id
+  storage_account_name    = azurerm_storage_account.state.name
   container_access_type = "private"
 }

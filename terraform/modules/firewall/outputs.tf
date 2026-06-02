@@ -17,5 +17,5 @@ output "bastion_id" {
     value = azurerm_bastion_host.main.id
 }   
 output "firewall_policy_id" {
-    value = azurerm_firewall_policy.main.id
+    value = azurerm_firewall_policy.firewall_policy.id
 }

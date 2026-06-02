@@ -31,12 +31,12 @@ variable "spoke_hub" {
 variable "firewall_subnet_name" {
     description = "Name of the firewall subnet"
     type        = string
-    default     = "firewall_subnet_name"
+    default     = "AzureFirewallSubnet"
 }
 variable "bastion_subnet_name" {
     description = "Name of the bastion subnet"
     type        = string
-    default     = "bastion_subnet_name"
+    default     = "AzureBastionSubnet"
 }
 variable "appgw_subnet_name" {
     description = "Name of the Application Gateway subnet"

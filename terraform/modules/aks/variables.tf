@@ -8,12 +8,12 @@ variable "aks_identity_name" {
 variable "aks_app_pool_name" {
     description = "Name of the AKS App Node Pool"
     type        = string
-    default     = "app-pool"
+    default     = "apppool"
 }
 variable "aks_cron_job_pool_name" {
     description = "Name of the AKS Cron Job Node Pool"
     type        = string
-    default     = "cron-job-pool"
+    default     = "cronjobpool"
 }
 variable "log_analytics_name" {
     description = "Name of the Log Analytics Workspace"
@@ -34,5 +34,5 @@ variable "aks_dns_prefix"{
 variable "kubernetes_version" {
     description = "Kubernetes version for the AKS Cluster"
     type        = string
-    default     = "1.32"
+    default     = "1.35.4"
 }
