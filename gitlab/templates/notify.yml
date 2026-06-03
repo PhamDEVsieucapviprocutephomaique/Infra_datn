@@ -1,0 +1,30 @@
+# templates/notify.yml
+notify-success:
+  stage: notify
+  image: alpine:3.18
+  script:
+    - |
+      curl -X POST \
+        -H "Content-Type: application/json" \
+        -d '{
+          "text": " Deploy thành công: `'$CI_PROJECT_NAME'` v`'$CI_COMMIT_SHORT_SHA'`\nMôi trường: `'$ENV'`\nTác vụ: '$CI_JOB_URL'"
+        }' \
+        $SLACK_WEBHOOK_URL
+  rules:
+    - if: $CI_COMMIT_BRANCH == "main" || $CI_COMMIT_BRANCH == "develop" || $CI_COMMIT_TAG
+  when: on_success
+
+notify-failure:
+  stage: notify
+  image: alpine:3.18
+  script:
+    - |
+      curl -X POST \
+        -H "Content-Type: application/json" \
+        -d '{
+          "text": " Deploy **thất bại**: `'$CI_PROJECT_NAME'`\nStage: `'$CI_JOB_STAGE'`\nXem log: '$CI_JOB_URL'"
+        }' \
+        $SLACK_WEBHOOK_URL
+  rules:
+    - if: $CI_COMMIT_BRANCH == "main" || $CI_COMMIT_BRANCH == "develop" || $CI_COMMIT_TAG
+  when: on_failure

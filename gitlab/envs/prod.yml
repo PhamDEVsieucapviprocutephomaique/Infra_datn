@@ -1,0 +1,9 @@
+# envs/prod.yml
+CI_PROJECT_NAME: "order-service"
+ENV: "prod"
+K8S_NAMESPACE: "production"
+AKS_RG: "rg-aks-prod"
+AKS_NAME: "aks-prod"
+TF_STORAGE_ACCOUNT: "tfstateprodsa"
+TF_CONTAINER: "terraform-state"
+SLACK_WEBHOOK_URL: ${SLACK_WEBHOOK_URL_PROD}

@@ -1,0 +1,9 @@
+# envs/dev.yml
+CI_PROJECT_NAME: "order-service"
+ENV: "dev"
+K8S_NAMESPACE: "dev"
+AKS_RG: "rg-aks-dev"
+AKS_NAME: "aks-dev"
+TF_STORAGE_ACCOUNT: "tfstatedevsa"
+TF_CONTAINER: "terraform-state"
+SLACK_WEBHOOK_URL: ${SLACK_WEBHOOK_URL_DEV}

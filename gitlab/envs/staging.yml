@@ -1,0 +1,9 @@
+# envs/staging.yml
+CI_PROJECT_NAME: "order-service"
+ENV: "staging"
+K8S_NAMESPACE: "staging"
+AKS_RG: "rg-aks-staging"
+AKS_NAME: "aks-staging"
+TF_STORAGE_ACCOUNT: "tfstatestagesa"
+TF_CONTAINER: "terraform-state"
+SLACK_WEBHOOK_URL: ${SLACK_WEBHOOK_URL_STAGING}

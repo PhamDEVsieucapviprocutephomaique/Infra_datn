@@ -1,0 +1,70 @@
+# templates/deploy.yml
+.helm_deploy: &helm_deploy
+  stage: deploy
+  image: alpine/helm:3.13.3
+  before_script:
+    - apk add --no-cache curl jq
+    - |
+      az login --service-principal \
+        -u $AZURE_CLIENT_ID \
+        -p $AZURE_CLIENT_SECRET \
+        -t $AZURE_TENANT_ID
+    - az aks get-credentials --resource-group $AKS_RG --name $AKS_NAME
+  script:
+    - |
+      helm upgrade --install $CI_PROJECT_NAME-$ENV \
+        ./charts/base-service \
+        -f ./releases/$ENV/$CI_PROJECT_NAME.yaml \
+        --namespace $K8S_NAMESPACE \
+        --create-namespace \
+        --wait \
+        --timeout 10m \
+        --set image.tag=$CI_COMMIT_SHORT_SHA \
+        --set environment=$ENV
+  tags:
+    - helm
+    - azure
+
+deploy-dev:
+  <<: *helm_deploy
+  variables:
+    ENV: dev
+    K8S_NAMESPACE: dev
+    AKS_RG: rg-aks-dev
+    AKS_NAME: aks-dev
+  environment:
+    name: dev
+    url: https://dev-api.${CI_PROJECT_NAME}.example.com
+  rules:
+    - if: $CI_COMMIT_BRANCH == "develop"
+
+deploy-staging:
+  <<: *helm_deploy
+  variables:
+    ENV: staging
+    K8S_NAMESPACE: staging
+    AKS_RG: rg-aks-staging
+    AKS_NAME: aks-staging
+  environment:
+    name: staging
+    url: https://staging-api.${CI_PROJECT_NAME}.example.com
+  rules:
+    - if: $CI_COMMIT_BRANCH == "main"
+  needs:
+    - deploy-dev
+
+deploy-prod:
+  <<: *helm_deploy
+  variables:
+    ENV: prod
+    K8S_NAMESPACE: production
+    AKS_RG: rg-aks-prod
+    AKS_NAME: aks-prod
+  environment:
+    name: prod
+    url: https://api.${CI_PROJECT_NAME}.example.com
+  rules:
+    - if: $CI_COMMIT_TAG
+  needs:
+    - deploy-staging
+  when: manual

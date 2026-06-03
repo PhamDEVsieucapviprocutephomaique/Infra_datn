@@ -1,0 +1,26 @@
+# templates/build.yml
+.docker_build: &docker_build
+  stage: build
+  image: docker:24.0.5
+  services:
+    - docker:24.0.5-dind
+  before_script:
+    - docker login -u $AZURE_CLIENT_ID -p $AZURE_CLIENT_SECRET $DOCKER_REGISTRY
+  script:
+    - |
+      docker build \
+        --build-arg VERSION=$CI_COMMIT_SHORT_SHA \
+        -t $DOCKER_REGISTRY/$CI_PROJECT_NAME:$CI_COMMIT_SHORT_SHA \
+        -t $DOCKER_REGISTRY/$CI_PROJECT_NAME:latest \
+        .
+    - docker push $DOCKER_REGISTRY/$CI_PROJECT_NAME --all-tags
+  after_script:
+    - docker logout $DOCKER_REGISTRY
+  tags:
+    - docker
+    - azure
+
+build:
+  <<: *docker_build
+  rules:
+    - if: $CI_COMMIT_BRANCH == "main" || $CI_COMMIT_BRANCH == "develop"
