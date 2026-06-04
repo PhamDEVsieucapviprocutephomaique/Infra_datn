@@ -31,16 +31,16 @@ resource "azurerm_kubernetes_cluster" "main" {
   resource_group_name = data.terraform_remote_state.network.outputs.resource_group_name
   dns_prefix          = var.aks_dns_prefix 
   kubernetes_version  = var.kubernetes_version
-  sku_tier           = "Premium"
+  sku_tier           = "Free"
     default_node_pool {
         name                         = "system"
         node_count                   = 1
-        vm_size                      = "Standard_D2_v4"
+        vm_size                      = "Standard_B2s"
         vnet_subnet_id               = data.terraform_remote_state.network.outputs.system_pool_subnet_id
-        auto_scaling_enabled         = true
-        min_count                    = 1
-        max_count                    = 1
-        os_disk_size_gb              = 128
+        # auto_scaling_enabled         = true
+        # min_count                    = 1
+        # max_count                    = 1
+        os_disk_size_gb              = 30
         os_disk_type                 = "Managed"
         only_critical_addons_enabled = true
         upgrade_settings {
@@ -104,12 +104,13 @@ resource "azurerm_kubernetes_cluster" "main" {
 resource "azurerm_kubernetes_cluster_node_pool" "app" {
   name                  = var.aks_app_pool_name
   kubernetes_cluster_id = azurerm_kubernetes_cluster.main.id
-  vm_size               = "Standard_D2_v4"
+  vm_size               = "Standard_B2s"
   vnet_subnet_id        = data.terraform_remote_state.network.outputs.app_pool_subnet_id
-  auto_scaling_enabled  = true
-  min_count             = 1
-  max_count             = 1
-  os_disk_size_gb       = 128
+  node_count = 1
+  # auto_scaling_enabled  = true
+  # min_count             = 1
+  # max_count             = 1
+  os_disk_size_gb       = 30
   os_disk_type          = "Managed"
   os_type               = "Linux"
   node_labels = {
@@ -123,12 +124,13 @@ resource "azurerm_kubernetes_cluster_node_pool" "app" {
 resource "azurerm_kubernetes_cluster_node_pool" "cron_job" {
   name                  = var.aks_cron_job_pool_name
   kubernetes_cluster_id = azurerm_kubernetes_cluster.main.id
-  vm_size               = "Standard_D2_v4"
+  vm_size               = "Standard_B2s"
   vnet_subnet_id        = data.terraform_remote_state.network.outputs.cron_job_pool_subnet_id
-  auto_scaling_enabled  = true
-  min_count             = 1
-  max_count             = 1
-  os_disk_size_gb       = 128
+  node_count = 1
+  # auto_scaling_enabled  = true
+  # min_count             = 1
+  # max_count             = 1
+  os_disk_size_gb       = 30
   os_disk_type          = "Managed"
   os_type               = "Linux"
   node_labels = {
