@@ -99,7 +99,6 @@ resource "azurerm_kubernetes_cluster" "main" {
 }
 
 
-//  ko đủ qouta , hàng free học tập nên chịu =))
 
 resource "azurerm_kubernetes_cluster_node_pool" "app" {
   name                  = var.aks_app_pool_name
