@@ -2,8 +2,8 @@ data "terraform_remote_state" "network" {
   backend = "azurerm"
   config = {
     resource_group_name  = "terraform-state"
-    storage_account_name = "storage_account"
-    container_name       = "storage_container"
+    storage_account_name = "9082400test"
+    container_name       = "082400container"
     key                  = "network.tfstate"
   }
 }
@@ -12,8 +12,8 @@ data "terraform_remote_state" "aks" {
   backend = "azurerm"
   config = {
     resource_group_name  = "terraform-state"
-    storage_account_name = "storage_account"
-    container_name       = "storage_container"
+    storage_account_name = "9082400test"
+    container_name       = "082400container"
     key                  = "aks.tfstate"
   }
 }
@@ -22,9 +22,19 @@ data "terraform_remote_state" "nginx" {
   backend = "azurerm"
   config = {
     resource_group_name  = "terraform-state"
-    storage_account_name = "storage_account"
-    container_name       = "storage_container"
+    storage_account_name = "9082400test"
+    container_name       = "082400container"
     key                  = "nginx.tfstate"
+  }
+}
+
+data "terraform_remote_state" "services" {
+  backend = "azurerm"
+  config = {
+    resource_group_name  = "terraform-state"
+    storage_account_name = "9082400test"
+    container_name       = "082400container"
+    key                  = "services.tfstate"
   }
 }
 
@@ -141,6 +151,7 @@ resource "azurerm_application_gateway" "main" {
     protocol            = "Http"
     port                = 80
     path                = "/"
+    host="127.0.0.1"
 
     match {
       status_code = ["200-399"]
@@ -168,7 +179,7 @@ resource "azurerm_application_gateway" "main" {
   # ── SSL Certificate (lấy từ Key Vault) ──
   ssl_certificate {
     name                = local.ssl_certificate_name
-    key_vault_secret_id = var.ssl_cert_key_vault_secret_id
+    key_vault_secret_id = data.terraform_remote_state.services.outputs.ssl_cert_secret_id
   }
 
   # ── SSL Policy ──
@@ -221,5 +232,5 @@ resource "azurerm_user_assigned_identity" "appgw" {
 resource "azurerm_role_assignment" "appgw_keyvault" {
   principal_id         = azurerm_user_assigned_identity.appgw.principal_id
   role_definition_name = "Key Vault Secrets User"
-  scope                = var.keyvault_id
+  scope                = data.terraform_remote_state.services.outputs.keyvault_id
 }

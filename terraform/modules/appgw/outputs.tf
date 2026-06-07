@@ -7,7 +7,7 @@ output "appgw_public_ip" {
 }
 
 output "appgw_backend_pool_id" {
-  value = azurerm_application_gateway.main.backend_address_pool[0].id
+  value = one(azurerm_application_gateway.main.backend_address_pool).id
 }
 
 output "waf_policy_id" {

@@ -3,8 +3,8 @@ data "terraform_remote_state" "network" {
   backend = "azurerm"
   config = {
     resource_group_name  = "terraform-state"
-    storage_account_name = "storage_account"
-    container_name       = "storage_container"
+    storage_account_name = "9082400test"
+    container_name       = "082400container"
     key                  = "network.tfstate"
   }
 }
@@ -14,8 +14,8 @@ data "terraform_remote_state" "aks" {
   backend = "azurerm"
   config = {
     resource_group_name  = "terraform-state"
-    storage_account_name = "storage_account"
-    container_name       = "storage_container"
+    storage_account_name = "9082400test"
+    container_name       = "082400container"
     key                  = "aks.tfstate"
   }
 }
@@ -92,10 +92,10 @@ resource "azurerm_monitor_metric_alert" "pod_restart" {
 
   criteria {
     metric_namespace = "Microsoft.ContainerService/managedClusters"
-    metric_name      = "kube_pod_status_restarts_total"
+    metric_name      = "kube_pod_status_ready"
     aggregation      = "Average"
-    operator         = "GreaterThan"
-    threshold        = 5
+    operator         = "LessThan"
+    threshold        = 1
   }
 
   action {
