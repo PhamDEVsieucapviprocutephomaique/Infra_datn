@@ -53,6 +53,19 @@ resource "azurerm_firewall_policy_rule_collection_group" "main" {
       protocols             = ["UDP"]
     }
   }
+    network_rule_collection {
+    name     = "aks-to-api-server"
+    priority = 210
+    action   = "Allow"
+    
+    rule {
+      name                  = "allow-api-server"
+      source_addresses      = data.terraform_remote_state.network.outputs.spoke_vnet_address_space
+      destination_addresses = ["*"]
+      destination_ports     = ["443", "9000"]
+      protocols             = ["TCP"]
+    }
+  }
 
 application_rule_collection {
     name     = "aks-outbound-fqdn"

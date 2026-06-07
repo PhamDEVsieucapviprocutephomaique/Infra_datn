@@ -35,7 +35,7 @@ resource "azurerm_kubernetes_cluster" "main" {
     default_node_pool {
         name                         = "system"
         node_count                   = 1
-        vm_size                      = "Standard_B2s"
+        vm_size                      = "Standard_B2pls_v2"
         vnet_subnet_id               = data.terraform_remote_state.network.outputs.system_pool_subnet_id
         # auto_scaling_enabled         = true
         # min_count                    = 1
@@ -103,7 +103,7 @@ resource "azurerm_kubernetes_cluster" "main" {
 resource "azurerm_kubernetes_cluster_node_pool" "app" {
   name                  = var.aks_app_pool_name
   kubernetes_cluster_id = azurerm_kubernetes_cluster.main.id
-  vm_size               = "Standard_B2s"
+  vm_size               = "Standard_B2pls_v2"
   vnet_subnet_id        = data.terraform_remote_state.network.outputs.app_pool_subnet_id
   node_count = 1
   # auto_scaling_enabled  = true
@@ -123,7 +123,7 @@ resource "azurerm_kubernetes_cluster_node_pool" "app" {
 resource "azurerm_kubernetes_cluster_node_pool" "cron_job" {
   name                  = var.aks_cron_job_pool_name
   kubernetes_cluster_id = azurerm_kubernetes_cluster.main.id
-  vm_size               = "Standard_B2s"
+  vm_size               = "Standard_B2pls_v2"
   vnet_subnet_id        = data.terraform_remote_state.network.outputs.cron_job_pool_subnet_id
   node_count = 1
   # auto_scaling_enabled  = true

@@ -17,6 +17,18 @@ data "terraform_remote_state" "aks" {
     key                  = "aks.tfstate"
   }
 }
+
+data "terraform_remote_state" "nginx" {
+  backend = "azurerm"
+  config = {
+    resource_group_name  = "terraform-state"
+    storage_account_name = "storage_account"
+    container_name       = "storage_container"
+    key                  = "nginx.tfstate"
+  }
+}
+
+
 resource "azurerm_public_ip" "appgw" {
   name                = var.appgw_pip_name
   location            = data.terraform_remote_state.network.outputs.location
@@ -108,7 +120,7 @@ resource "azurerm_application_gateway" "main" {
   # ── Backend ──
   backend_address_pool {
     name = local.backend_address_pool_name
-    fqdns = [var.aks_ingress_fqdn]
+    ip_addresses = [data.terraform_remote_state.nginx.outputs.nginx_internal_ip]
   }
 
   backend_http_settings {
@@ -123,13 +135,12 @@ resource "azurerm_application_gateway" "main" {
   # ── Health Probe ──
   probe {
     name                = "health-probe"
-    host                = "127.0.0.1"
     interval            = 30
     timeout             = 30
     unhealthy_threshold = 3
     protocol            = "Http"
     port                = 80
-    path                = "/health"
+    path                = "/"
 
     match {
       status_code = ["200-399"]

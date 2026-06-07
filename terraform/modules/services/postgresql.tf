@@ -1,6 +1,4 @@
-# ─────────────────────────────────────────
-# PostgreSQL Flexible Server
-# ─────────────────────────────────────────
+
 resource "azurerm_postgresql_flexible_server" "main" {
   name                          = var.postgresql_name
   location                      = data.terraform_remote_state.network.outputs.location
