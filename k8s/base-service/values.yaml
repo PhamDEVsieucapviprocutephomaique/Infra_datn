@@ -5,3 +5,13 @@ namespace: "default"
 environment: "dev"
 
 replicas: 3
+
+containername: "default-container"
+
+image: "latest"
+
+containerport: 8080
+
+serviceport: 80
+
+servicetype: "ClusterIP"
