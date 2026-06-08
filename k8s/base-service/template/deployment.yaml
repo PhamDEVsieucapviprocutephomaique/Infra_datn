@@ -1,13 +1,12 @@
 apiVersion:apps/v1
 kind:Deployment
 metadata:
-  name : appdeployment
-  namespace:default
-  labels:
-    app:my-app
-    environment:dev
+  name : {{.Values.appname}}-deployment
+  namespace:{{.Values.namespace}}
+  labels :
+    {{- include "base-service.labels" . | nindent 4}}
 spec :
-  replicas:3
+  replicas: {{.Values.replicas}}
   selector:
     matchLabels:
       app: my-app

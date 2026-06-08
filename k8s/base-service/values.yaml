@@ -1,0 +1,7 @@
+appname: "default-app"
+
+namespace: "default"
+
+environment: "dev"
+
+replicas: 3

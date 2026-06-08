@@ -24,3 +24,7 @@ crash.*.log
 # Các file kế hoạch (Plan files)
 *.tfplan
 *.tfplan.*
+
+*.pfx
+*.key
+*.crt
