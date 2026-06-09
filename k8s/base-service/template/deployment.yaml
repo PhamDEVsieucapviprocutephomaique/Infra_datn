@@ -16,10 +16,12 @@ spec :
         {{- include "base-service.labels" . | nindent 8}}
     spec:
       containers:
-      - name:my-container
-        image:myapp:latest
+      - name:{{.Values.containername}}
+        image:{{.Values.image}}
         ports:
-        - containerPort:8080
+        - containerPort:{{.Values.containerport}}
+
+        a
 
       
 
