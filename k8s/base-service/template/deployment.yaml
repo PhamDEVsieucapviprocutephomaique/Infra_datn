@@ -21,6 +21,8 @@ spec :
         ports:
         - containerPort:{{.Values.containerport}}
 
+        ddd
+
         
 
       
