@@ -26,3 +26,8 @@ hpa:
   targetCPUUtilizationPercentage: 50
 
   targetMemoryUtilizationPercentage: 50
+
+pdb:
+  enabled: true
+
+  minAvailable: 1
