@@ -1,0 +1,11 @@
+apiVersion : v1
+kind: ConfigMap
+metadata:
+  name: {{.Values.appname}}-configmap
+  namespace: {{.Values.namespace}}
+  labels:
+    {{- include "base-service.labels" . | nindent 4}} 
+data : 
+  {{- range $key, $value := .Values.configmapdata }}
+  {{ $key }}: {{ $value | quote }}
+  {{- end }}

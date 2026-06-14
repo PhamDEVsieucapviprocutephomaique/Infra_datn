@@ -31,3 +31,9 @@ pdb:
   enabled: true
 
   minAvailable: 1
+
+configmapdata:
+  # vi du da roi chinh sau
+  DATABASE_URL: "postgres://default:5432/mydb"
+  LOG_LEVEL: "info"
+  APP_MODE: "production"

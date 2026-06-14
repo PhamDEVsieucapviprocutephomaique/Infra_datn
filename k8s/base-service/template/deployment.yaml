@@ -20,6 +20,9 @@ spec :
         image:{{.Values.image}}
         ports:
         - containerPort:{{.Values.containerport}}
+        envFrom : 
+        - configMapRef:
+            name: {{.Values.appname}}-configmap
         
 
         
