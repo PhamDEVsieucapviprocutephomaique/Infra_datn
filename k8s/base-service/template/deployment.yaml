@@ -25,7 +25,3 @@ spec :
             name: {{.Values.appname}}-configmap
         
 
-        
-
-      
-

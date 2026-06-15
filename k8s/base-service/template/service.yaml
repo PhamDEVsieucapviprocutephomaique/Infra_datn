@@ -11,4 +11,4 @@ spec:
     {{- include "base-service.selectorLabels" . | nindent 4}}
   ports:
   - port:{{.Values.serviceport}}
-    targetPort:{{.Values.containerport}}
+    targetPort:{{.Values.containerport}}a
