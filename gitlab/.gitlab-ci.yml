@@ -1,27 +1,152 @@
-# .gitlab-ci.yml
 stages:
-  - build
+  - lint
   - test
-  - deploy-dev
-  - deploy-staging
-  - deploy-prod
-  - notify
+  - build
+  - scan
+  - push
+  - deploy
+  - smoke-test
+  - rollback
 
 variables:
-  DOCKER_REGISTRY: myregistry.azurecr.io
-  K8S_NAMESPACE_DEV: dev
-  K8S_NAMESPACE_STAGING: staging
-  K8S_NAMESPACE_PROD: production
-  HELM_RELEASE_PREFIX: $CI_PROJECT_NAME
 
-include:
-  - local: templates/build.yml
-  - local: templates/deploy.yml
-  - local: templates/terraform.yml
-  - local: templates/notify.yml
 
-workflow:
-  rules:
-    - if: $CI_COMMIT_BRANCH == "main"
-    - if: $CI_COMMIT_BRANCH == "develop"
-    - if: $CI_COMMIT_TAG
+lint:
+  stage:lint
+  script:
+    - echo "checking code"
+    - helm lint  ./infra/k8s/charts/myapp
+    - yamllint ./infra/k8s/charts/myapp/templates/*.yaml
+  only :
+    - merge_requests
+    - main
+
+unit-test:
+  stage: test
+  script:
+    - echo "unit test"
+    - go test ./infra/k8s/charts/myapp/templates/*.go
+  only:
+    - merge_requests
+    - main
+build:
+  stage: build
+  script:
+    - echo " build docker image"
+    - docker build -t myapp:latest ./infra/k8s/charts/myapp
+  only:
+    - main
+
+security-scan:
+  stage: scan
+  script:
+    - echo "scan image"
+    - trivy image myapp:latest
+    - snyk test
+  only:
+    - main
+  needs:
+    - build
+
+push:
+  stage: push
+  script:
+    - echo "Pushing image to GitLab Registry..."
+    - docker push myapp:latest
+  only:
+    - main
+  needs:
+    - security-scan
+
+deploy-dev:
+  stage: deploy
+  environment:
+    name: dev
+    url: https://dev.example.com
+  script:
+    - echo " deploying to dev"
+    - kubectl set image deployment/$HELM_RELEASE $HELM_RELEASE=$IMAGE_NAME:$IMAGE_TAG -n development
+    - kubectl rollout status deployment/$HELM_RELEASE -n development
+  only : 
+    - main
+  when :
+    - manual
+  needs:
+    - push
+
+deploy-staging:
+  stage: deploy
+  environment:
+    name: staging
+    url: https://staging.example.com
+  script:
+    - echo "Deploying to Staging..."
+    - helm upgrade --install $HELM_RELEASE ./infra/k8s/charts/myapp \
+      -f ./infra/k8s/charts/myapp/values/staging.yaml \
+      --set image.tag=$IMAGE_TAG
+  only:
+    - main
+  when: manual
+  needs:
+    - push
+deploy-production:
+  stage: deploy
+  environment:
+    name: production
+    url: https://example.com
+  script:
+    - echo "Deploying to Production..."
+    - helm upgrade --install $HELM_RELEASE ./infra/k8s/charts/myapp \
+      -f ./infra/k8s/charts/myapp/values/production.yaml \
+      --set image.tag=$IMAGE_TAG
+  only:
+    - main
+  when: manual
+  needs:
+    - push
+
+smoke-test:
+  stage: smoke-test
+  script:
+    - echo "smoke test dev and staging"
+    - curl -f https://dev.example.com/health
+    - curl -f https://staging.example.com/health
+    - curl -f https://example.com/health
+  needs:
+    - deploy-dev
+    - deploy-staging
+    - deploy-production
+  only:
+    - main
+rollback-dev:
+  stage: rollback
+  environment:
+    name: development
+  script:
+    - echo "Rollback Development..."
+    - kubectl rollout undo deployment/$HELM_RELEASE -n development
+  when: manual
+  only:
+    - main
+
+rollback-staging:
+  stage: rollback
+  environment:
+    name: staging
+  script:
+    - echo "Rollback Staging..."
+    - helm rollback $HELM_RELEASE -n staging
+  when: manual
+  only:
+    - main
+
+rollback-production:
+  stage: rollback
+  environment:
+    name: production
+  script:
+    - echo "Rollback Production..."
+    - helm rollback $HELM_RELEASE -n production
+  when: manual
+  only:
+    - main
